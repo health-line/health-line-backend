@@ -1,3 +1,10 @@
+
+# Created by https://www.gitignore.io/api/git,python,vagrant
+
+### Git ###
+*.orig
+
+### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -43,7 +50,7 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
-*.cover
+*,cover
 .hypothesis/
 
 # Translations
@@ -97,5 +104,9 @@ ENV/
 # mkdocs documentation
 /site
 
-# mypy
-.mypy_cache/
+### Vagrant ###
+.vagrant/
+
+# End of https://www.gitignore.io/api/git,python,vagrant
+
+\.DS_Store

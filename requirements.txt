@@ -1,0 +1,11 @@
+flask
+numpy
+scipy
+pandas
+sklearn
+mysql-python
+pyhdb
+flask-sqlalchemy
+flask-cors
+sqlalchemy
+sqlalchemy-hana
