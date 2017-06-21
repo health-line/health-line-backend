@@ -12,11 +12,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_DATABASE_URI']
 db = SQLAlchemy(app)
 db.engine.execute(text("""SET SCHEMA HPI_2017;"""))
 
-@app.route("/")
+@app.route("/api/")
 def helloWorld():
   return "Hello, cross-origin-world!"
 
-@app.route("/")
+@app.route("/api/")
 def hello():
     sql = text("""SELECT "VALUE" FROM "HPI_2017"."DATAPOINTS" WHERE "KEY" = 'CALORIES' LIMIT 10""")
     result = db.engine.execute(sql)
@@ -25,7 +25,7 @@ def hello():
         names.append(row[0])
     return str(names)
 
-@app.route("/datakeys/")
+@app.route("/api/datakeys/")
 def datakeys():
     sql = text("""SELECT DISTINCT "KEY" FROM "HPI_2017"."DATAPOINTS" """)
     result = db.engine.execute(sql)
@@ -34,7 +34,7 @@ def datakeys():
         keys.append(row[0])
     return jsonify(keys)
 
-@app.route("/users/")
+@app.route("/api/users/")
 def users():
     sql = text("""SELECT * FROM "HPI_2017"."USERS" """)
     result = db.engine.execute(sql)
@@ -49,7 +49,7 @@ def users():
         users.append(user)
     return jsonify(users)
 
-@app.route("/user/<int:userId>/")
+@app.route("/api/user/<int:userId>/")
 def user(userId):
     sql = text("""SELECT * FROM "HPI_2017"."USERS" WHERE "ID" = {0}""".format(userId))
     result = db.engine.execute(sql)
@@ -62,7 +62,7 @@ def user(userId):
         user["HEIGHT"] = row[4]
         return jsonify(user)
 
-@app.route("/user/<int:userId>/data/<string:dataKeys>/start/<string:startDate>/end/<string:endDate>")
+@app.route("/api/user/<int:userId>/data/<string:dataKeys>/start/<string:startDate>/end/<string:endDate>")
 def data(userId, dataKeys, startDate, endDate):
     keys = "(\'" + "\', \'".join(dataKeys.split("+")) + "\')"
     sql = text("""SELECT "DATE", "KEY", "VALUE" FROM "HPI_2017"."DATAPOINTS" WHERE "USER" = {0} AND "DATE" >= '{1}' AND "DATE" <= '{2}' AND "KEY" IN {3} """.format(userId, startDate, endDate, keys))
@@ -75,7 +75,7 @@ def data(userId, dataKeys, startDate, endDate):
         dateDictionary[row[0].toordinal()][row[1]] = row[2]
     return jsonify(dateDictionary.values())
 
-@app.route("/user/<int:userId>/gesundheitscloud/")
+@app.route("/api/user/<int:userId>/gesundheitscloud/")
 def gesundheitscloud(userId):
     sql = text("""SELECT * FROM "HPI_2017"."GESUNDHEITSCLOUD" WHERE "USER" = {0} ORDER BY "DATE_START" DESC""".format(userId))
     result = db.engine.execute(sql)
@@ -92,7 +92,7 @@ def gesundheitscloud(userId):
         cloudResults.append(document)
     return jsonify(cloudResults)
 
-@app.route("/user/<int:userId>/events/")
+@app.route("/api/user/<int:userId>/events/")
 def events(userId):
     sql = text("""SELECT * FROM "HPI_2017"."EVENTS" WHERE "USER" = {0} ORDER BY "DATE_START" DESC""".format(userId))
     result = db.engine.execute(sql)
@@ -111,5 +111,5 @@ def events(userId):
 
 
 
-#@app.route("/user/<int:userId>")
+#@app.route("/api/user/<int:userId>")
 app.run(debug=True, port=4200, host="0.0.0.0")
