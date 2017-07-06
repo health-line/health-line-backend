@@ -10,7 +10,7 @@ CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_DATABASE_URI']
 
 db = SQLAlchemy(app)
-db.engine.execute(text("""SET SCHEMA HPI_2017;"""))
+db.engine.execute(text("""USE HPI_2017;"""))
 
 @app.route("/api/")
 def helloWorld():
